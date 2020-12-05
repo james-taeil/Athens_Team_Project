@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% block title %}아테네 학원입니다.{% endblock %}
+{% block content %}
+
+{% load static %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
+<script type="text/javascript" src="https://code.highcharts.com/modules/data.js"></script>
+
+<div class="card-box mb-30">
+ <script type="text/javascript">
+    $.get('chart.data', function(jsondata) {
+        Highcharts.chart('container', {
+           chart: {
+                type: 'column'
+            },
+
+            title : {
+                text : '일별 선생님 등록 수'
+            },
+
+            yAxis : {
+                title : {
+                    text: '명'
+               }
+            },
+
+            legend : {
+                layout : 'vertical',
+
+            },
+
+            data: jsondata,
+        });
+    });
+
+</script>
+<!--    학생 학부모 통계-->
+<script type="text/javascript">
+    $.get('chart.customer.data', function(jsondata) {
+        Highcharts.chart('line', {
+           chart: {
+                type: 'column'
+            },
+
+            title : {
+                text : '일별 학생/학부모 등록 수'
+            },
+
+            yAxis : {
+                title : {
+                    text: '명'
+               }
+            },
+
+            legend : {
+                layout : 'vertical',
+            },
+
+            data: jsondata,
+        });
+    });
+
+</script>
+
+   <div class="main-container ml-20">
+      <div class="pd-ltr-20">
+         <div class="card-box pd-20 height-100-p mb-30">
+            <div class="row align-items-center">
+                    <div class="col">
+                        <p class="ml-2"> {{ day|date:"Y년 M d일" }}</p>
+                      <div class="da-card">
+                         <div class="da-card-photo" style="max-height:50%;">
+                              <img src="{% static '/vendors/images/athens_intro.jpg' %}" style="width : 100%; height : 400px;" alt="">
+                        </div>
+                      </div>
+                    </div>
+
+               <div class="col mr-5">
+               <div class="tab">
+                  <ul class="nav nav-tabs" role="tablist">
+                     <li class="nav-item">
+                        <a class="nav-link active text-blue" data-toggle="tab" href="#join" role="tab" aria-selected="true">선생님</a>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link text-blue" data-toggle="tab" href="#customer_join" role="tab" aria-selected="false">학생/학부모</a>
+                     </li>
+                  </ul>
+               <div class="tab-content">
+                  <div class="tab-pane fade show active" id="join" role="tabpanel">
+                     <div class="pd-20">
+                                <!-- 차트삽입 -->
+                        <div class="card-box mb-30" id="container" style="min-width: 310px; height: 400px; margin: 0 auto"> </div> </div>
+                     </div>
+                     <div class="tab-pane fade" id="customer_join" role="tabpanel">
+                        <div class="pd-20">
+                                <!-- 차트 삽입 -->
+                           <div class="card-box mb-30" id="line" style="min-width: 310px; height: 400px; margin: 0 auto"></div></div>
+                        </div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel">
+                           <div class="pd-20">
+                                <!-- 차트 삽입 -->
+                              <div class="card-box mb-30" id="area" style="min-width: 310px; height: 400px; margin: 0 auto"></div></div>
+                           </div>
+                        </div>
+                     </div>
+                <!-- 차트삽입 자리-->
+               </div>
+            </div>
+         </div>
+
+         <div class="pd-20 card-box mb-20">
+            <h5 class="h4 text-blue mb-20">선생님 현황</h5>
+               <div class="tab">
+                  <ul class="nav nav-tabs" role="tablist">
+                     <li class="nav-item">
+                        <a class="nav-link active text-blue" data-toggle="tab" href="#total" role="tab" aria-selected="true">전체 선생님</a>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link text-blue" data-toggle="tab" href="#math" role="tab" aria-selected="false">수학</a>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link text-blue" data-toggle="tab" href="#eng" role="tab" aria-selected="false">영어</a>
+                     </li>
+                  </ul>
+
+               <div class="tab-content">
+                  <div class="tab-pane fade show active" id="total" role="tabpanel">
+                     <div class="pd-20">
+                        <div class="row clearfix">
+                            {% if teacher_list %}
+                            {% for teacher in teacher_list %}
+                    <!-- 재직중인 사람만 메인화면에 보여주기 위한 if문-->
+                            {% if teacher.t_state %}
+                             <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+                                  <div class="da-card">
+                                     <div class="da-card-photo" style="max-height:50%;">
+                                        <img src="../media/{{ teacher.t_file }}" style="width : 100%; height : 400px;" alt="">
+                                     <div class="da-overlay">
+                                        <div class="da-social">
+                                            <ul class="clearfix">
+                                            <!-- 선생님 상세를 클릭했을 경우(window.open을 이용해 새로운 창을 띄웁니다.)-->
+                                                  <script>
+                                                       function openwindow(t_no){
+                                                       var url = "../admin/teacher_detail/" + t_no
+                                                       var win = window.open(url, "PopupWin", "width=700,height=700,left=670,top=150, location=no, resizable=no");}
+                                                  </script>
+                                             <li><a href="", onclick="openwindow({{ teacher.t_no }});">상세</a></li>
+                                             </ul>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="da-card-content">
+                                <!-- 관리자일 경우 원장 선생님으로 표시. 그렇지 않을 경우 선생님의 이름을 표시-->
+                                    {% if teacher.user.is_superuser %}
+                                    <h5 class="h5 mb-10 text-center">원장 {{ teacher.t_name }}</h5>
+                                    {% else %}
+                                    <h5 class="h5 mb-10 text-center">{{ teacher.t_name }} 선생님</h5>
+                                    {% endif %}
+                                 </div>
+                              </div>
+                             </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+
+                        <div class="tab-pane fade" id="math" role="tabpanel">
+                     <div class="pd-20">
+                                <div class="row clearfix">
+                                {% if teacher_math_list %}
+                                {% for teacher in teacher_math_list %}
+                                {% if teacher.t_state %}
+                                     <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+                                          <div class="da-card">
+                                             <div class="da-card-photo" style="max-height:50%;">
+                                                 <img src="../media/{{ teacher.t_file }}" style="width : 100%; height : 400px;" alt="">
+                                             <div class="da-overlay">
+                                                  <div class="da-social">
+                                                     <ul class="clearfix">
+                                                          <script>
+                                                               function openwindow(t_no){
+                                                               var url = "../admin/teacher_detail/" + t_no
+                                                               var win = window.open(url, "PopupWin", "width=700,height=700,left=670,top=150, location=no, resizable=no");}
+                                                          </script>
+                                                     <li><a href="", onclick="openwindow({{ teacher.t_no }});">상세</a></li>
+                                                     </ul>
+                                                  </div>
+                                             </div>
+                                          </div>
+                                              <div class="da-card-content">
+                                                  {% if teacher.user.is_superuser %}
+                                                  <h5 class="h5 mb-10 text-center">원장 {{ teacher.t_name }}</h5>
+                                                  {% else %}
+                                                  <h5 class="h5 mb-10 text-center">{{ teacher.t_name }} 선생님</h5>
+                                                  {% endif %}
+                                              </div>
+                                          </div>
+                                     </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="eng" role="tabpanel">
+                        <div class="pd-20">
+                            <div class="row clearfix">
+                                {% if teacher_eng_list %}
+                                {% for teacher in teacher_eng_list %}
+                                {% if teacher.t_state %}
+                                     <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+                                          <div class="da-card">
+                                             <div class="da-card-photo" style="max-height:50%;">
+                                                 <img src="../media/{{ teacher.t_file }}" style="width : 100%; height : 400px;" alt="">
+                                             <div class="da-overlay">
+                                                  <div class="da-social">
+                                                     <ul class="clearfix">
+                                                          <script>
+                                                               function openwindow(t_no){
+                                                               var url = "../admin/teacher_detail/" + t_no
+                                                               var win = window.open(url, "PopupWin", "width=700,height=700,left=670,top=150, location=no, resizable=no");}
+                                                          </script>
+                                                     <li><a href="", onclick="openwindow({{ teacher.t_no }});">상세</a></li>
+                                                     </ul>
+                                                  </div>
+                                             </div>
+                                          </div>
+                                              <div class="da-card-content">
+                                                  {% if teacher.user.is_superuser %}
+                                                  <h5 class="h5 mb-10 text-center">원장 {{ teacher.t_name }}</h5>
+                                                  {% else %}
+                                                  <h5 class="h5 mb-10 text-center">{{ teacher.t_name }} 선생님</h5>
+                                                  {% endif %}
+                                              </div>
+                                          </div>
+                                     </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+   <!-- js -->
+   <script src="../static/vendors/scripts/core.js"></script>
+   <script src="../static/vendors/scripts/script.min.js"></script>
+   <script src="../static/vendors/scripts/process.js"></script>
+   <script src="../static/vendors/scripts/layout-settings.js"></script>
+   <script src="../static/src/plugins/apexcharts/apexcharts.min.js"></script>
+   <script src="../static/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+   <script src="../static/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+   <script src="../static/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+   <script src="../static/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+   <script src="../static/vendors/scripts/dashboard.js"></script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base2.html' %}
+{% block content %}
+{% load static %}
+<div class="container">
+  <h1>상담</h1>
+    <div class="row">
+      <div class="col-lg-6 " style="width: 50%; margin : auto;">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">이름</th>
+        <td scope="col">전화번호</td>
+      </tr>
+    </thead>
+    <tbody>
+    {% if teacher_list %}
+    {% for teacher in teacher_list %}
+    <tr onclick="location.href='/consult/teacher/{{teacher.t_no}}'">
+      <td>{{ teacher.t_name }}</td>
+      <td>{{ teacher.t_phone }}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+  </table>
+      </div>
+    </div>
+</div>
+{% endblock %}

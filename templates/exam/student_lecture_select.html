@@ -1,0 +1,54 @@
+{% extends 'base2.html' %}
+{% block content %}
+{% load static %}
+
+<!--시험응시 - 강의선택-->
+<div class="container" style="padding : 100px 0px;">
+  <h1 class="mb-5">STEP 1. 강의 선택</h1>
+  <div class="row">
+      <div class="col-lg-6 " style="width: 50%; margin : auto;">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center" colspan="3">시험을 응시할 강의 선택</th>
+      </tr>
+    </thead>
+    <tbody>
+    <form method="post" action="{{pk}}">
+      {% csrf_token %}
+
+        <tr>
+            <th>강의를 선택해 주세요 : </th>
+            <th colspan="2">
+                <select name="l_no" class="form-control">
+                      {% if training_list %}
+                      {% for training in training_list %}
+                    <!-- l_no와 tr_no를 모두 가져오기 위해 value를 @로 구분한다 (view에서 @로 구분하여 나눌 것!)-->
+                        <option value="{{ training.l_no.l_no }}@{{ training.tr_no }}">{{ training.l_no.l_name }} ({{ training.l_no.t_no.t_name }} 선생님)</option>
+                      {% endfor %}
+                      {% else %}
+                            <option>신청한 강의가 없습니다.</option>
+
+                      {% endif %}
+                  </select>
+            </th>
+        </tr>
+        <tr>
+        <div class="row">
+            <th colspan="3" class="text-center">
+            <!-- 신청한 강의가 있을 때만 버튼 표시-->
+            {% if training_list %}
+            <button class="btn btn-primary" style="width : 120px;" name="btn" value="lecture">다음</button>
+            {% endif %}
+            </th>
+        </div>
+        </tr>
+
+    </form>
+
+    </tbody>
+  </table>
+      </div>
+  </div>
+</div>
+{% endblock %}

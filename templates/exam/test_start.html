@@ -1,0 +1,76 @@
+{% extends 'base2.html' %}
+{% block content %}
+{% load static %}
+
+<!--시험응시 - 시험시작-->
+<div class="container" style="padding : 100px 0px;">
+  <h1 class="mb-5">시험 시작</h1>
+  <div class="row">
+      <div class="col-lg-6 " style="width: 50%; margin : auto;">
+  <table class="table table-hover">
+    <thead>
+    {% if test_detail_list %}
+    {% for test_detail in test_detail_list %}
+      <tr style="background-color : pink; border-radius : 12px;">
+        <th scope="col" class="text-center" colspan="3">[ {{ test_detail.td_question_no }}번 문제 ]</th>
+      </tr>
+      <tr>
+          <th scope="col" class="text-center" colspan="3">Q . {{ test_detail.td_question }}</th>
+      </tr>
+    </thead>
+    <tbody>
+        <form method="post">
+          {% csrf_token %}
+
+            <tr>
+                <th class="text-center">1번 </th>
+                <th colspan="2"> {{ test_detail.td_choice_1 }}</th>
+            </tr>
+            <tr>
+                <th class="text-center">2번 </th>
+                <th colspan="2"> {{ test_detail.td_choice_2 }}</th>
+            </tr>
+            <tr>
+                <th class="text-center">3번 </th> <th colspan="2"> {{ test_detail.td_choice_3 }}</th>
+            </tr>
+            <tr>
+                <th class="text-center">4번 </th>
+                <th colspan="2"> {{ test_detail.td_choice_4 }} </th>
+            </tr>
+            <tr>
+                <th colspan="3" class="text-center">
+                <!-- 해당 문제의 번호를 가져오기 위해 이름 설정-->
+                    <select name="answer" class="form-control">
+<!--                        <option value="None" class="text-center">정답선택</option>-->
+                        <option value="1">1번</option>
+                        <option value="2">2번</option>
+                        <option value="3">3번</option>
+                        <option value="4">4번</option>
+                    </select>
+                </th>
+            <!-- 해당 시험의 시험번호를 숨겨서 보냅니다. -->
+                <input name="te_no" value = "{{ test_detail.te_no_id }}" style ="display :none">
+            <!-- 해당 학생의 수강번호를 숨겨서 보냅니다. -->
+                <input name="tr_no" value = "{{ tr_no }}" style ="display :none">
+            </tr>
+            {% endfor %}
+            {% endif %}
+            <tr>
+                <div class="row">
+                    <th colspan="3" class="text-center">
+                    <button class="btn btn-primary" style="width : 120px;" name="btn" value="test_submit">응시</button>
+                    </th>
+                </div>
+            </tr>
+
+        </form>
+
+             </tbody>
+         </table>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

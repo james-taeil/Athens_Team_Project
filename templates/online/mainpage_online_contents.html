@@ -1,0 +1,43 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container" style="padding : 100px 0px;">
+  <h1>온라인자료</h1>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-lg-9 mt-5 mb-5">
+  <button style="display:inline-block; float:right;" name="button" class="btn btn-secondary" onclick="location.href='/main/online/'">목록</button>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">강의</th>
+        <th scope="col">{{content.l_no.l_name}}</th>
+      </tr>
+      <tr>
+        <th scope="col">제목</th>
+        <th scope="col">{{content.on_title}}</th>
+      </tr>
+      <tr>
+        <th scope="col" style="vertical-align:middle">구분</th>
+        <th scope="col">{{content.on_div}}</th>
+      </tr>
+      <tr>
+        <th scope="col">첨부파일</th>
+        {% if fsize > 0 %}
+        <th scope="col"><a href="download?on_no={{content.on_no}}">{{fname}}, {{fsize}}KB</a></th>
+        {% endif %}
+      </tr>
+      <tr>
+        <th scope="col" style="vertical-align:top">내용</th>
+        <th scope="col">{{content.on_content}}</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+      <div class="col"></div>
+    </div>
+</div>
+
+{% endblock %}

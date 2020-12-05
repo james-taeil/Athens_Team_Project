@@ -1,0 +1,63 @@
+{% extends 'base2.html' %}
+{% block content %}
+{% load static %}
+ 
+{% include "mypage/base/mypage_header.html" %}
+ 
+    <!-- 본인인증 -->
+    <div class="container mt-5 mb-5" style="padding : 100px 100px">
+        <div class="text-center mb-5">
+            <h1>개인 정보 수정</h1>
+        </div>
+        <form method="POST" class="post-form">
+            {%csrf_token%}  <!-- 보안이슈로 입력 -->
+            <!-- 정보수정 -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 " style="width: 50%; margin : auto;">
+                            <table class="mb-5">
+                                <tr>
+                                    <td><label for="useremail">이 메 일</label></td>
+                                    <td><label>*</label></td>
+                                    <td><input type="text" value="{{ user_info.username }}" style="width:300px;" disabled name="useremail"></td>
+                                </tr>
+                                <tr><td><label></label></td></tr>
+                                <tr>
+                                    <td><label for="username">이름</label></td>
+                                    <td><label>*</label></td>
+                                    <td><input name="username" type="text" value="{{ customer_info.c_name }}" style="width:300px;" disabled></td>
+                                </tr>
+                                <tr><td><label></label></td></tr>
+                                <tr>
+                                    <td><label for="userphone"></label>휴대전화</td>
+                                    <td><label></label>*</td>
+                                    <td><input name="userphone" type="text" value="{{ customer_info.c_phone }}" style="width:300px;"></td>
+                                </tr>
+                                <tr><td><label></label></td></tr>
+                                <tr>
+                                    <td><label for="useradd"></label>주 소</td>
+                                    <td><label></label> </td>
+                                    <td><input name="useradd" type="text" value="{{ customer_info.c_add }}" style="width:300px;"></td>
+                                </tr>
+                                <tr><td><label></label></td></tr>
+                                {% if customer_info.c_code != None %}
+                                <tr>
+                                    <td><label for="usercode"></label>학생 코드</td>
+                                    <td><label></label></td>
+                                    <td><input name="usercode" type="text" value="{{ customer_info.c_code }}" style="width:300px;" disabled></td>
+                                </tr>
+                                {% endif %}
+                            </table>
+                    </div>
+                </div>
+                <div class="container" style="margin: auto;">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-5 col-12">
+                            <input name="btn" type="submit" class="btn btn-success ml-3" style="width :80px; height : 40px; border-radius : 5px;" value="저장">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

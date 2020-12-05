@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <head>
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="HandheldFriendly" content="true">
+    <meta http-equiv="imagetoolbar" content="no">
+    <meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
+
+
+<link rel="stylesheet" href="https://www.xphobia.net/css/default_shop.css">
+<script src="https://www.xphobia.net/js/html5.js"></script>
+<script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-KG8KKTD"></script>
+<script>
+// 자바스크립트에서 사용하는 전역변수 선언
+var g5_url       = "https://www.xphobia.net";
+var g5_bbs_url   = "https://www.xphobia.net/bbs";
+var g5_is_member = "";
+var g5_is_admin  = "";
+var g5_is_mobile = "";
+var g5_bo_table  = "";
+var g5_sca       = "";
+var g5_editor    = "";
+var g5_cookie_domain = "";
+</script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" type="text/css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+<script src="https://www.xphobia.net/js/jquery.menu.js"></script>
+<script src="https://www.xphobia.net/js/common.js"></script>
+<script src="https://www.xphobia.net/js/wrest.js"></script>
+<link href="https://www.xphobia.net/css/common.css" rel="stylesheet" type="text/css">
+<link href="https://www.xphobia.net/css/site_admin.css" rel="stylesheet" type="text/css">
+<link href="https://www.xphobia.net/css/site.css" rel="stylesheet" type="text/css">
+<link href="https://www.xphobia.net/css/mobile_site.css" rel="stylesheet" type="text/css">
+<link href="https://www.xphobia.net/css/tablet_site.css" rel="stylesheet" type="text/css">
+<link href="https://www.xphobia.net/css/vendors.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script>
+    var check_ajax_count = 0;
+    var check_ajax_arr = {};
+    var check_loading_done = false;
+    var turn_cnt = 50;  // 회차 카운트
+
+    function check_loading() {
+        for(var key in check_ajax_arr) {
+            if(check_ajax_arr[key] == false) return true;
+        }
+        return false;
+    }
+
+    function reset_ajax() {
+        check_ajax_count = 0;
+        check_ajax_arr = {};
+        check_loading_done = false;
+    }
+</script>
+<script>
+$(document).ready(function() {
+    var dateval = $('#dateval').val();
+    //지점 퀘스트목록 - 20161212
+
+    $.ajax({
+        type:'POST',
+        url:'./ck_no1.php',
+        data : {'date' : dateval},
+        dataType: 'json',
+        success: function(data){
+            $.each(data, function(key, val) {
+                    $('ul#cl1').append('<li id="'+val.ji_name+'"><p>'+val.ji_name2+'</p></li>');
+					//$('.branch_event').append(val.ji_event);
+                    //$('ul#cl2').append('<li id="'+val.ro_cate+'">'+val.ro_cate+'</li>');
+            });
+            tck3();
+        },
+        error: function(request, textStatus, errorThrown){
+            //에러내용확인
+//            alert('error: ' + textStatus);
+        },
+    });
+
+	});
+</script>
+<script>
+function check_quest(shop) {
+
+    $.ajax({
+        type:'POST',
+        url:'./ck_quest_no1.php',
+        data : {'shop' : shop},
+        dataType: 'json',
+        beforeSend: function() {
+            $('#cl2 li').remove();
+            $('#cl3 li').remove();
+        },
+        success: function(data){
+			$('#cl2 li').remove();
+            $('#cl3 li').remove();
+			$.each(data, function(key, val) {
+				//$("'#"+val.rel_order_time+"'").attr('class','time_lock');
+				$('ul#cl2').append('<li id="'+val.ro_cate+'" quest="'+val.ro_name+'" quest_vis="'+val.ro_name_vis+'"><span><img src="https://www.xphobia.net/data/item/'+val.it_img3+'" style="width:40px;height:40px;"/></span><p>'+val.ro_name_vis+'</p></li>');
+				//$('#'+val.rel_order_time).addClass('time_lock');
+			});
+			tck2();
+        },
+        error: function(request, textStatus, errorThrown){
+            //에러내용확인
+//            alert('error: ' + textStatus);
+        },
+    })
+}
+</script>
+<script>
+function check_quest_event(shop) {
+
+    $.ajax({
+        type:'POST',
+        url:'./ck_quest_event.php',
+        data : {'shop' : shop},
+        dataType: 'json',
+        beforeSend: function() {
+			$('.event_popup').empty();
+            $('.branch_event').empty();
+        },
+        success: function(data){
+                $.each(data, function(key, val) {
+                    $('.event_popup').append(val.ji_event);
+					$('.branch_event').append(val.ji_event);
+                });
+                //tck2();
+        },
+        error: function(request, textStatus, errorThrown){
+            //에러내용확인
+//            alert('error: ' + textStatus);
+        },
+    })
+}
+</script>
+<script>
+function check_time(shop,quest,date,time,bool) {
+    var it_id='';
+
+	bool = typeof bool !== 'undefined' ? bool : false;
+
+    if(!bool) $('.wrap-loading').removeClass('display-none');
+    check_ajax_arr[time] = false;
+    check_ajax_count++;
+
+    $.ajax({
+        type:'POST',
+        url:'./ck_date_no1.php',
+        data : {'qr_id' : it_id ,'shop' : shop,'quest' : quest, 'date' : date, 'time' : time},
+        dataType: 'json',
+        success: function(data){
+            if(date!=null){
+                $.each(data, function(key, val) {
+					$("#cl3 li").each(function(){
+						if($(this).attr("id") == val.rel_order_time){
+							$(this).addClass("time_lock");
+						}
+					});
+                });
+            }
+            check_ajax_arr[time] = true;
+            check_ajax_count--;
+            if(!check_loading_done && check_ajax_count == 0) {
+                if(!bool) $('.wrap-loading').addClass('display-none');
+                check_loading_done = true;
+            }
+        },
+        error: function(request, textStatus, errorThrown){
+            //에러내용확인
+//            alert('error: ' + textStatus);
+        },
+    });
+}
+
+function replaceAll(str, searchStr, replaceStr) {
+    if (str){
+        return str.split(searchStr).join(replaceStr);
+    }
+}
+</script>
+<style>
+	.branch_event{text-align:center;}
+	.branch_event img{width:288px;};
+</style>
+<style type="text/css">
+        .wrap-loading{
+            position: fixed;
+            left:0;
+            right:0;
+            top:0;
+            bottom:0;
+            background: rgba(0,0,0,0.2);
+            filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#20000000',endColorstr='#20000000');
+			z-index: 101;
+        }
+
+        .wrap-loading div{
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			display: table;
+			width: 300px;
+			height: 140px;
+			margin-left: -150px;
+			margin-top: -70px;
+			border-radius: 8px;
+			background: #fff;
+        }
+		.wrap-loading div p {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			font-weight: bold;
+			font-size: 18px;
+			color: #df723d;
+		}
+		.wrap-loading div p i {
+			display: block;
+			margin-bottom: 15px;
+			font-size: 38px;
+		}
+        .display-none{
+            display:none;
+        }
+    </style>
+<style>
+    .date-holiday a {
+        background: tomato !important;
+        color: #fff !important;
+    }
+</style>
+<script type="text/javascript">
+
+    var holidays = {
+        "0101":{type:0, title:"신정", year:""},
+        "0301":{type:0, title:"삼일절", year:""},
+        "0505":{type:0, title:"어린이날", year:""},
+        "0606":{type:0, title:"현충일", year:""},
+        "0815":{type:0, title:"광복절", year:""},
+        "1003":{type:0, title:"개천절", year:""},
+        "1009":{type:0, title:"한글날", year:""},
+        "1225":{type:0, title:"크리스마스", year:""},
+
+        "0506":{type:0, title:"대체휴일", year:"2019"}
+, "0512":{type:0, title:"부처님오신날", year:"2019"}
+, "0912":{type:0, title:"추석", year:"2019"}
+, "0913":{type:0, title:"추석", year:"2019"}
+, "0914":{type:0, title:"추석", year:"2019"}
+, "0124":{type:0, title:"설날", year:"2020"}
+, "0125":{type:0, title:"설날", year:"2020"}
+, "0126":{type:0, title:"설날", year:"2020"}
+, "0127":{type:0, title:"대체휴일", year:"2020"}
+, "0415":{type:0, title:"21대국회의원선거", year:"2020"}
+, "0430":{type:0, title:"석가탄신일", year:"2020"}
+, "0817":{type:0, title:"임시공휴일", year:"2020"}
+, "0930":{type:0, title:"추석", year:"2020"}
+, "1001":{type:0, title:"추석", year:"2020"}
+, "1002":{type:0, title:"추석", year:"2020"}
+,
+
+    };
+
+    $.datepicker.regional['ko'] = {
+            prevText: '이전달',
+            nextText: '다음달',
+            currentText: '오늘',
+            monthNames: ['1월(JAN)','2월(FEB)','3월(MAR)','4월(APR)','5월(MAY)','6월(JUN)',
+            '7월(JUL)','8월(AUG)','9월(SEP)','10월(OCT)','11월(NOV)','12월(DEC)'],
+            monthNamesShort: ['1월','2월','3월','4월','5월','6월',
+            '7월','8월','9월','10월','11월','12월'],
+            dayNames: ['일','월','화','수','목','금','토'],
+            dayNamesShort: ['일','월','화','수','목','금','토'],
+            dayNamesMin: ['일','월','화','수','목','금','토'],
+            weekHeader: 'Wk',
+            dateFormat: 'yymmdd',
+            altField: '.input_date',
+            firstDay: 0,
+            isRTL: false,
+            showMonthAfterYear: true,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['ko']);
+
+
+    $( "#datepicker" ).datepicker({
+      inline: true,
+      showOtherMonths: true,
+      showMonthAfterYear: true,
+      selectOtherMonths: true,
+      dateFormat: "yymmdd",
+      altField: '.input_date',
+      minDate: new Date('11/13/2020'), //0
+      maxDate: new Date('11/19/2020'), //30 + 1
+      firstDay: 0,
+      monthNames: [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' ],
+      dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+
+      onSelect: function(dateText) {
+        $('#cl3 li').remove();
+		$('.input_time').val('');
+		$('.quest_name').val('');
+		$('.quest_name2').val('');
+		$('.quest_name2_vis').val('');
+        $('#cl2 li.select').removeClass('select');
+            var wins = $(window).width();
+            if (wins < 751) {
+                // var offset = $(".m_shop_select").offset();
+                var offset = $(".cate_select").offset();
+                $('html, body').animate({scrollTop : offset.top}, 400);
+            }
+        },
+        beforeShowDay: function(day) {
+
+		   var result;
+		   // 포맷에 대해선 다음 참조(http://docs.jquery.com/UI/Datepicker/formatDate)
+		   var holiday = holidays[$.datepicker.formatDate("mmdd",day )];
+		   var thisYear = $.datepicker.formatDate("yy", day);
+
+		   // exist holiday?
+		   if (holiday) {
+			   if(holiday.year == "" || thisYear == holiday.year) {
+				   result =  [true, "date-holiday", holiday.title];
+			   }
+		   }
+
+		   if(!result) {
+			   switch (day.getDay()) {
+				   case 0: // is sunday?
+					   result = [true, "date-sunday"];
+					   break;
+				   case 6: // is saturday?
+					   result = [true, "date-saturday"];
+					   break;
+				   default:
+					   result = [true, ""];
+					   break;
+			   }
+		   }
+
+		   return result;
+	   }
+    });
+</script>
+<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>
+<script type="text/javascript">
+$(document).ready(function() {
+	var wins = $(window).width();
+	if (wins < 751) {
+		$('.shop_select').addClass('m_shop_select');
+		$('.quest_select').addClass('m_quest_select');
+		$('.time_select').addClass('m_time_select');
+	} else {
+		$('.shop_select').removeClass('m_shop_select');
+		$('.quest_select').removeClass('m_quest_select');
+		$('.time_select').removeClass('m_time_select');
+	}
+});
+$(window).resize(function(event) {
+	var wins = $(window).width();
+	if (wins < 751) {
+		$('.shop_select').addClass('m_shop_select');
+		$('.quest_select').addClass('m_quest_select');
+		$('.time_select').addClass('m_time_select');
+	} else {
+		$('.shop_select').removeClass('m_shop_select');
+		$('.quest_select').removeClass('m_quest_select');
+		$('.time_select').removeClass('m_time_select');
+	}
+});
+</script>
+<script>
+
+    function changeCate(v, n) {
+        $('#ji_cate_val').val(v);
+        $('#ji_category > *').removeClass('select');
+        //$('ul#ji_category').removeClass('select');
+        $('#cate_' + n).addClass('select');
+
+        $('.input_time').val('');
+        $('.quest_name').val('');
+        $('.quest_name2').val('');
+        $('.quest_name2_vis').val('');
+        $('ul#cl2').empty();
+        $('ul#cl3').empty();
+
+        reloadJijum();
+    }
+
+    function reloadJijum() {
+        var dateval = $('#dateval').val();
+        var cate = $('#ji_cate_val').val();
+
+        $.ajax({
+            type:'POST',
+            url:'./ck_no1.php',
+            data : {'date' : dateval, 'cate' : cate},
+            dataType: 'json',
+            success: function(data){
+                $('ul#cl1').empty();
+                $.each(data, function(key, val) {
+                    $('ul#cl1').append('<li id="'+val.ji_name+'"><p>'+val.ji_name2+'</p></li>');
+                    //$('.branch_event').append(val.ji_event);
+                    //$('ul#cl2').append('<li id="'+val.ro_cate+'">'+val.ro_cate+'</li>');
+                });
+                tck3();
+            },
+            error: function(request, textStatus, errorThrown){
+                //에러내용확인
+                console.log('error: ' + textStatus);
+            },
+        });
+    }
+
+function tck(){
+    $('.select_time ul li').off().on('click', function(event) {
+        if(!check_loading_done && check_loading()) {
+            alert('예약시간 확인중입니다.\n잠시만 기다려 주세요');
+        } else {
+            console.log('click time');
+            if ($(this).hasClass('time_lock')) {
+            } else {
+                $('.select_time ul li').removeClass('select');
+                $(this).addClass('select');
+                var time = $(this).attr('id');
+                $('.input_time').val(time);
+            }
+
+            var shop = $('.shop_name').val();
+            var quest = $('.quest_name2').val();
+            var dates = $('.input_date').val();
+            var times = $('.input_time').val();
+            var checks = $(this).attr('check');
+            var checks2 = $(this).attr('ck_id');
+            $('.class_check').val(checks);
+            $('.ck_id').val(checks2);
+
+            check_time(shop, quest, dates, times, true);
+        }
+    });
+}
+
+function tck2(){
+	$('.select_quest ul li').on('click', function(event) {
+	    if(check_ajax_count != 0) {
+	        alert('예약 확인 중입니다.\n잠시 후 이용해주세요');
+        } else {
+            event.preventDefault();
+            var wins = $(window).width();
+            if (wins < 751) {
+                var offset = $(".m_time_select").offset();
+                $('html, body').animate({scrollTop: offset.top}, 400);
+            }
+            var select_quest = $('.select_quest ul li').bind();
+            $('.select_quest ul li').removeClass('select');
+            $(this).addClass('select');
+            var quest = $(this).attr('id');
+            var quest_2 = $(this).attr('quest');
+            var quest_2_vis = $(this).attr('quest_vis');
+
+            $('.quest_name').val(quest);
+            $('.quest_name2').val(quest_2);
+            $('.quest_name2_vis').val(quest_2_vis);
+            $('.input_time').val('');
+
+            var shop = $('.shop_name').val();
+            var quest2 = $('.quest_name').val();
+            var dates = $('.input_date').val();
+            reset_ajax();
+            check_date(shop, quest2, dates, quest_2);
+        }
+	});
+}
+
+function tck3(){
+	$('.select_shop ul li').on('click', function(event) {
+	    var cgvPopup = '', popupUrl = 'http://m.cgv.co.kr/WebApp/specialV4/Playzonedetail.aspx?idx=19';
+	    var selectId = $(this).attr('id');
+
+	    if(selectId == 'CGV 용산점') {
+            cgvPopup = window.open(popupUrl);
+        } else {
+            if(check_ajax_count != 0) {
+                alert('예약 확인 중입니다.\n잠시 후 이용해주세요');
+            } else {
+                event.preventDefault();
+                $('.select_shop ul li').removeClass('select');
+                $(this).addClass('select');
+
+                var shop = $(this).attr('id');
+                $('.shop_name').val(shop);
+                $('.input_time').val('');
+                $('.quest_name').val('');
+                $('.quest_name2').val('');
+                $('.quest_name2_vis').val('');
+
+                var shops = $('.shop_name').val();
+                var wins = $(window).width();
+                if (wins < 751) {
+                    var offset = $(".m_quest_select").offset();
+                    $('html, body').animate({scrollTop: offset.top}, 400);
+                }
+                reset_ajax();
+                check_quest(shops);
+                check_quest_event(shops);
+            }
+        }
+	});
+}
+
+
+function check_time_now(id,branch,date,time) {
+    $.ajax({
+        type:'POST',
+        url:'./ck_date_now.php',
+        data : {'branch' : branch, 'date' : date, 'time' : time},
+        dataType: 'json',
+        success: function(data){
+            if(data!=null){
+                $.each(data, function(key, val) {
+                    //$("'#"+val.rel_order_time+"'").attr('class','time_lock');
+                    $('#'+id).append('<tr><td class="td_quest">'+val.ro_cate+'</td><td class="td_thema">'+val.ro_branch+'</td><td class="td_time"></td><td class="td_reser"><span><a href="">예약하기</a></span></td></tr>');
+                    //$('#'+val.rel_order_time).addClass('time_lock');
+                });
+            }
+        },
+        error: function(request, textStatus, errorThrown){
+            //에러내용확인
+            alert('error: ' + textStatus);
+        },
+    });
+}
+
+function replaceAll(str, searchStr, replaceStr) {
+    if (str){
+        return str.split(searchStr).join(replaceStr);
+    }
+}
+
+function isWeekend( yyyymmdd ) {
+	var yyyy = parseInt( yyyymmdd.substring( 0, 4 ), 10 );
+	var mm  = ( parseInt( yyyymmdd.substring( 4, 6 ), 10 )-1);
+	var dd  = parseInt( yyyymmdd.substring( 6, 8 ), 10 );
+	var date = new Date( yyyy, mm, dd ); //Date 개체를 만듭니다.
+	//var weekend = new Array('목', '금', '토', '일', '월', '화', '수');
+
+	// 토요일, 일요일인 경우는 false반환
+	var day = date.getDay();
+	//var tday = weekend[day]
+	var holi = $('.ui-datepicker-current-day');
+
+	// 주말일경우
+	if(day == 6 || day == 0 || holi.hasClass('date-holiday')){
+		return '0';
+	}else{
+		return '1';
+	}
+	/*
+	if( day ==1 || day == 4 || day == 5 || day == 6 || day ==0 ) {
+	return '1';
+	}else{
+	return '0';
+	}
+	*/
+}
+
+function check_date(shop,quest,date,quest2) {
+    $.ajax({
+        type:'POST',
+        url:'./ck_date2_no1.php',
+        data : {'shop' : shop,'quest' : quest,'quest2' : quest2, 'date' : date},
+        dataType: 'json',
+        beforeSend: function() {
+			$('#cl3 li').remove();
+        },
+		success: function(dataval){
+			$('#cl3 li').remove();
+            $.each(dataval, function(key, val) {
+
+                var week=isWeekend(date);
+
+                var li_tag = '';
+
+				// 평일이면
+                if(week=='1'){
+                    // todo : 회차 증가 처리
+                    for(var i=1;i<=turn_cnt;i++){
+
+						split	= eval("val.ro_day"+i).split('_');
+						time	= split[0];
+						sale_day= split[1];
+						sale_end= split[2];
+                        time_lock(time);
+
+                        if(time=='00:00:00' || time==''){
+                        }else{
+                            							if(sale_day == 'Y'){
+								$('ul#cl3').append('<li ck_id="'+val.ro_id+'" check="'+val.class+'" id="'+time+'" class="time_sale"><p>'+time+'</p></li>');
+							}else{
+								$('ul#cl3').append('<li ck_id="'+val.ro_id+'" check="'+val.class+'" id="'+time+'"><p>'+time+'</p></li>');
+							}
+                        }
+                    }
+
+                // 주말이면
+                }else{
+
+					var now   = new Date();
+					var year2 = now.getFullYear();
+					var mon2   = (now.getMonth()+1)>9 ? ''+(now.getMonth()+1) : '0'+(now.getMonth()+1);
+					var day22 = now.getDate()>9 ? ''+now.getDate() : '0'+now.getDate();
+
+					var chan_val = year2 +  mon2 + day22;
+
+
+					// 오늘날짜가 아니면
+					if(date != chan_val){
+                        // todo 회차 증가처리
+						for(var i=1;i<=turn_cnt;i++){
+
+							split	= eval("val.ro_end"+i).split('_');
+							time	= split[0];
+							sale_day= split[1];
+							sale_end= split[2];
+							time_lock(time);
+
+							if (time){
+
+								if(sale_end == 'Y'){
+									$('ul#cl3').append('<li ck_id="'+val.ro_id+'" check="'+val.class+'" id="'+time+'" class="time_sale"><p>'+time+'</p></li>');
+								}else{
+									$('ul#cl3').append('<li ck_id="'+val.ro_id+'" check="'+val.class+'" id="'+time+'"><p>'+time+'</p></li>');
+								}
+							}
+						}
+
+					}else{
+
+						for(var i=1;i<=turn_cnt;i++){
+
+							split	= eval("val.ro_end"+i).split('_');
+							time	= split[0];
+							sale_day= split[1];
+							sale_end= split[2];
+							time_lock(time);
+
+							if(time=='00:00:00' || time==''){
+							}else{
+
+								if(sale_end == 'Y'){
+									$('ul#cl3').append('<li ck_id="'+val.ro_id+'" check="'+val.class+'" id="'+time+'" class="time_sale"><p>'+time+'</p></li>');
+								}else{
+									$('ul#cl3').append('<li ck_id="'+val.ro_id+'" check="'+val.class+'" id="'+time+'"><p>'+time+'</p></li>');
+								}
+							}
+						}
+					}
+                }
+                tck();
+            });
+
+        },
+        error: function(request, textStatus, errorThrown){
+            //에러내용확인
+//            alert('error: ' + textStatus);
+        },
+    });
+}
+
+function time_lock(times){
+
+    var shop=$('.shop_name').val();
+    var quest2=$('.quest_name2').val();
+    var quest=$('.quest_name').val();
+    var dates=$('.input_date').val();
+    check_time(shop,quest2,dates,times);
+}
+</script>
+<script type="text/javascript">
+	// 예약 유효성 체크
+	// 17-01-18
+	$('.next_btn a').on('click', function(event) {
+		if ($('.quest_name').val() == '') {
+			alert('퀘스트를 선택해주세요.')
+			return false;
+		}
+		if ($('.input_time').val() == '') {
+			alert('시간을 선택해주세요.')
+			return false;
+		}
+		$('.input_week').val(isWeekend($('.input_time').val()));
+	});
+</script>
+</head>
+
+<body>
+<div class="container">
+    <div class="reser_cont_wrap">
+        <form action="./reservation2.php" method="post" id="f">
+            <input type="hidden" name="shop_name" class="shop_name">
+            <input type="hidden" name="quest_name" class="quest_name">
+            <input type="hidden" name="quest_name2" class="quest_name2">
+			<input type="hidden" name="quest_name2_vis" class="quest_name2_vis">
+            <input type="hidden" name="dates" class="input_date" value="20201113">
+            <input type="hidden" name="times" class="input_time">
+			<input type="hidden" name="class_check" class="class_check">
+			<input type="hidden" name="ck_id" class="ck_id">
+			<input type="hidden" name="input_week" class="input_week">
+
+            <div class="reser_info">
+                <ul>
+                    <li class="reser_info_01">예약가능</li>
+                    <li class="reser_info_02">예약불가</li>
+                    <li class="reser_info_03">할인</li>
+                    <li class="reser_info_04" onclick="window.open('guide_pop.php','예약가이드','width=950,height=700')">예약가이드</li>
+                </ul>
+            </div>
+            <div class="reser_content">
+                <div class="date_select">
+                    <input type="hidden" value="20201113" id="dateval" class="input_date">
+                    <h4>날짜</h4>
+                    <div class="select_date">
+                        <div id="datepicker" class="hasDatepicker">
+                            <div class="ui-datepicker-inline ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" style="display: block;"><div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all"><a class="ui-datepicker-prev ui-corner-all ui-state-disabled" title="이전달"><span class="ui-icon ui-icon-circle-triangle-w">이전달</span></a><a class="ui-datepicker-next ui-corner-all ui-state-disabled" title="다음달"><span class="ui-icon ui-icon-circle-triangle-e">다음달</span></a><div class="ui-datepicker-title"><span class="ui-datepicker-year">2020</span>&nbsp;<span class="ui-datepicker-month">11</span></div></div><table class="ui-datepicker-calendar"><thead><tr><th scope="col" class="ui-datepicker-week-end"><span title="일">일</span></th><th scope="col"><span title="월">월</span></th><th scope="col"><span title="화">화</span></th><th scope="col"><span title="수">수</span></th><th scope="col"><span title="목">목</span></th><th scope="col"><span title="금">금</span></th><th scope="col" class="ui-datepicker-week-end"><span title="토">토</span></th></tr></thead><tbody><tr><td class=" ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled date-sunday"><span class="ui-state-default">1</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">2</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">3</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">4</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">5</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">6</span></td><td class=" ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled date-saturday"><span class="ui-state-default">7</span></td></tr><tr><td class=" ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled date-sunday"><span class="ui-state-default">8</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">9</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">10</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">11</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">12</span></td><td class=" ui-datepicker-days-cell-over  ui-datepicker-current-day ui-datepicker-today" data-handler="selectDay" data-event="click" data-month="10" data-year="2020"><a class="ui-state-default ui-state-highlight ui-state-active ui-state-hover" href="#">13</a></td><td class=" ui-datepicker-week-end date-saturday" data-handler="selectDay" data-event="click" data-month="10" data-year="2020"><a class="ui-state-default" href="#">14</a></td></tr><tr><td class=" ui-datepicker-week-end date-sunday" data-handler="selectDay" data-event="click" data-month="10" data-year="2020"><a class="ui-state-default" href="#">15</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="10" data-year="2020"><a class="ui-state-default" href="#">16</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="10" data-year="2020"><a class="ui-state-default" href="#">17</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="10" data-year="2020"><a class="ui-state-default" href="#">18</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="10" data-year="2020"><a class="ui-state-default" href="#">19</a></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">20</span></td><td class=" ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled date-saturday"><span class="ui-state-default">21</span></td></tr><tr><td class=" ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled date-sunday"><span class="ui-state-default">22</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">23</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">24</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">25</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">26</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">27</span></td><td class=" ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled date-saturday"><span class="ui-state-default">28</span></td></tr><tr><td class=" ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled date-sunday"><span class="ui-state-default">29</span></td><td class=" ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">30</span></td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">1</span></td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">2</span></td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">3</span></td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled "><span class="ui-state-default">4</span></td><td class=" ui-datepicker-week-end ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled date-saturday">
+                                <span class="ui-state-default">5</span>
+                            </td>
+                            </tr>
+                            </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        <div id="event_popup">
+                        </div>
+                    </div>
+					<div class="branch_event">
+
+					</div>
+                </div>
+                <div class="cate_select">
+                    <input type="hidden" value="" name="ji_cate_val" id="ji_cate_val">
+                    <h4>카테고리별</h4>
+                    <div class="select_inner select_cate">
+                        <ul id="ji_category">
+                            <li id="cate_3" onclick="changeCate('포비아 던전', '3');"><p>포비아 던전</p></li>
+                            <li id="cate_4" onclick="changeCate('히든 퀘스트', '4');"><p>히든 퀘스트</p></li>
+                            <li id="cate_2" onclick="changeCate('방탈출 카페', '2');"><p>방탈출 카페</p></li>
+                            <li id="cate_1" onclick="changeCate('미션 브레이크', '1');"><p>미션 브레이크</p></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="shop_select">
+                    <h4>지점별</h4>
+                    <div class="select_inner select_shop">
+                        <ul id="cl1">
+
+						</ul>
+                    </div>
+                </div>
+                <div class="quest_select">
+                    <h4>퀘스트별</h4>
+                    <div class="select_inner select_quest">
+                        <ul id="cl2">
+
+						</ul>
+                    </div>
+                </div>
+                <div class="time_select">
+                    <h4>시간</h4>
+                    <div class="select_inner select_time">
+                        <ul id="cl3">
+
+						</ul>
+                    </div>
+                </div>
+            </div>
+            <div class="reser_btn_wrap" style="text-align:center">
+                <!-- <p class="reser_now_btn" onclick="window.open('reservation_now.php','지금가능한시간','width=1000,height=700')"><i class="fa fa-clock-o"></i>지금 가능한 시간 보기</p> -->
+                <ul style="float:none;overflow: hidden;display:inline-block;margin:0 auto;">
+                    <li class="reset_btn"><a href="https://www.xphobia.net/reservation/reservation_check.php">처음부터</a></li>
+                    <!-- <li class="next_btn"><input type="submit" value="다음으로"></li> -->
+                    <li class="next_btn"><a href="javascript:document.getElementById('f').submit()">다음으로</a></li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

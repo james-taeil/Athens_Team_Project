@@ -1,0 +1,28 @@
+{% extends 'teacherbase.html' %}
+
+{% block content %}
+<div style="margin-top:50px; margin-left:200px">
+  <div class="card border-dark mb-3" style="width: 100%;">
+    <div class="card-header">
+       <h2>학부모님: {{content.c_no.c_name}}</h2>
+       <h3>학생: {{content.cu_student}}</h3>
+    </div>
+     <div class="card-body">
+      <h6 class="card-title">상담일: {{content.cu_res_time}}</h6>
+      <h6 class="card-title">진행현황: {{content.cu_state}}</h6>
+      <h5 class="card-text">사전 상담내용: {{content.cu_text}}</h5>
+    </div>
+  <br>
+  <h2>상담 내용</h2>
+  <form method="POST">
+  <div class="card border-dark mb-3" style="width: 100%;">
+    <div class="card-body">
+        {% csrf_token %}
+        <textarea rows="20" cols="50" name="cu_content" style="resize:none;">{{content.cu_content}}</textarea>
+    </div>
+      <button type="submit" class="btn btn-outline-success" style="float:middle;">완료</button>
+  </div>
+  </form>
+  </div>
+</div>
+{% endblock %}

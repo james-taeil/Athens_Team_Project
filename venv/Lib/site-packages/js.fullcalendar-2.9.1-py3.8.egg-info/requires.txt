@@ -1,0 +1,4 @@
+fanstatic
+js.jquery>=1.7.1
+js.momentjs>=2.5.0
+setuptools

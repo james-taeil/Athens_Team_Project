@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <script src="{% static 'jquery.js' %}"></script>
+    <script src="{% static 'jquery.simple-dtpicker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap.css' %}">
+    <link type="text/css" href="{% static 'jquery.simple-dtpicker.css' %}" rel="stylesheet" />
+    <script>
+        $(function(){
+            $('#date_picker').dtpicker();
+        });
+    </script>
+</head>
+<body>
+
+
+    {% if error %}
+    <div class="alert alert-dismissible alert-danger">
+        <strong>정보를 잘못 입력하셨습니다.</strong>
+    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <select name="children" class="form-control">
+            {% if default_child %}
+            <option value="{{default_child.c_no}}">{{default_child.c_name}}</option>
+            {% endif %}
+            {% for child in children %}
+            <option value="{{child.c_no}}">{{child.c_name}}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" name="button" value="c">학생이름 확인</button>
+
+        {% if set_teacher %}
+        {% if lecture_list %}
+        <select name="lecture" class="form-control">
+            {% for lecture in lecture_list %}
+            <option value="{{lecture.l_no}}">{{lecture.l_name}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="button" value="l">확인</button>
+        {% else %}
+        <p>등록된 강의가 없습니다.</p>
+        {% endif %}
+        {% endif %}
+        <div class="form-group">
+        {% if set_timeset %}
+        <p>{{lecture.l_name}}/{{lecture.t_no.t_name}} 선생님</p>
+        <input type="hidden" name="lecture" value="{{lecture.l_no}}">
+        <button name="button" value="1">17:00~18:00</button>
+        <button name="button" value="2">22:00~23:00</button>
+        {% endif %}
+        {% if time_error %}
+        <div class="alert alert-dismissible alert-danger">
+            <strong>이미 예약된 시간입니다.</strong>
+        </div>
+        {% endif %}
+        {% if timeset == 1 %}
+        <script>
+            $(function(){
+                $('#date_picker').dtpicker();
+            });
+            $(function(){
+                $('*[name=cu_res_time]').appendDtpicker({
+                    "inline":true,
+                    "locale":"ko",
+                    "minTime": "17:00",
+                    "maxTime": "17:40",
+                    "minuteInterval": 20,
+                });
+            });
+        </script>
+        {{time_form.as_p}}
+        <textarea rows="5" cols="30" name="cu_text">상담 내용에 대해서 간단하게 적어주세요</textarea>
+        <button type="submit" name="button" value="3" class="btn btn-info">예약</button>
+        {% endif %}
+        {% if timeset == 2 %}
+            <script>
+                $(function(){
+                    $('#date_picker').dtpicker();
+                });
+                $(function(){
+                    $('*[name=cu_res_time]').appendDtpicker({
+                        "inline":true,
+                        "locale":"ko",
+                        "minTime": "22:00",
+                        "maxTime": "22:40",
+                        "minuteInterval": 20,
+                    });
+                });
+            </script>
+        {{time_form.as_p}}
+        <textarea rows="5" cols="30" name="cu_text" style="resize:none;">상담 내용에 대해서 간단하게 적어주세요</textarea>
+        <button type="submit" name="button" value="3" class="btn btn-info">예약</button>
+        {% endif %}
+        </div>
+    </form>
+</body>
+</html>
+

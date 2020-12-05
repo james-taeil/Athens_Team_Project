@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Post Edit</h1>
+    <form action="/my/{{ customer.c_no }}/update/", method="POST">
+        {% csrf_token %}
+        <input type="text" name="useremail" value="{{ customer_info.c_id }}" disabled/>
+        <input type="password" name="userpw" value="{{ customer_info.c_pw }}"/>
+        <input type="submit" value="Submit"/>
+    </form>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plus.css' %}">
+</head>
+<style>
+    body {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        div {
+            overflow: hidden;
+        }
+        img {
+            display: block;
+        }
+        #wrap {
+            width: 100%;
+            height: 100%;
+
+        }
+
+
+        .top-logo{
+            width:100%;
+            height: 25%;
+        }
+
+        div.logo {
+
+        border: 1px solid black;
+        width: 50%;
+        height: 25%;
+        margin-left: 25%;
+
+        }
+
+        #content {
+        width: 100%;
+        height: 65%;
+        min-width: 1050px;
+        min-height: 650px;
+        }
+
+        div.sign {
+            width: 25;
+            height: 5%;
+            padding: 1%;
+
+
+            position: relative;
+        }
+
+        div.join_btn {
+            float: left;
+            padding: 1px;
+            width: 20%;
+            height: 7%;
+            position: relative; left: 20%;
+            }
+
+        div.border {
+            border: solid black;
+            width: 75%;
+            height: 75%;
+            position: relative; left: 14%;
+            padding:10%;
+        }
+        div.border_logo {
+            width: 75%;
+            height: 75%;
+            position: relative; left: 32%;
+
+        }
+
+
+</style>
+
+<body>
+<div class="container">
+    <div id="wrap" class="text-center">
+        <div class="border_logo">
+            <div class="top-logo">
+                <img class="logo" src="{% static 'athenlogo.png' %}" width="450" height="350"/>
+            </div>
+        </div>
+        <div class="border">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 panel panel-default">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                        {{form.as_p}}
+                        </div>
+                        <button type="submit" class="btn btn-success mb-4" style ="width : 200px; height: 40px;">로그인</button>
+                    </form>
+                </div>
+            </div>
+            <div class="join_btn">
+                <a href="/sign"><button type="button" class="btn btn-primary btn-sm" style="width :100px; height : 40px;">회원가입</button></a>
+            </div>
+            <div class="join_btn">
+                <a href="/find"><button type="button" class="btn btn-primary btn-sm" style="width :100px; height : 40px;">이메일찾기</button></a>
+            </div>
+            <div class="join_btn">
+                <a href="/find/pw_find"><button type="button" class="btn btn-primary btn-sm" style="width :100px; height : 40px;">PW찾기</button></a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>

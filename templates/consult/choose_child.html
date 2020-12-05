@@ -1,0 +1,34 @@
+{% extends 'base2.html' %}
+{% block content %}
+{% load static %}
+<div class="container" style="padding : 100px 100px">
+  <h1 class="mb-5">상담</h1>
+  <div class="row">
+      <div class="col-lg-4" style="margin : auto; text:center;">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">자녀 이름</th>
+      </tr>
+    </thead>
+    <tbody>
+    <form method="post" action="{{pk}}">
+      {% csrf_token %}
+      {% if children_list %}
+      {% for list in children_list %}
+        <tr onclick="location.href='/consult/{{list.pk}}'">
+          <th scope="row" style="width:15%">{{list.c_name}}</th>
+        </tr>
+      {% endfor %}
+      {% else %}
+        <tr>
+          <td>등록된 자녀가 없습니다.</td>
+        </tr>
+      {% endif %}
+    </form>
+    </tbody>
+  </table>
+      </div>
+  </div>
+</div>
+{% endblock %}

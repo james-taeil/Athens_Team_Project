@@ -1,0 +1,39 @@
+{% extends "base2.html" %}
+{% block content %}
+{% load static %}
+{% include "mypage/base/mypage_header.html" %}
+
+<div class="container" style="padding : 100px 0px;">
+  <h1 class="mb-5">결제 내역</h1>
+  {% if lecture_list %}
+  {% for lecture_fee in lecture_list %}
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-lg-10 mb-5">
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:15%">강의명</th>
+            <th scope="col" style="width:15%">강의 시작 날짜</th>
+            <th scope="col" style="width:10%">과 정(개월)</th>
+            <th scope="col" style="width:20%">반 / 학년</th>
+            <th scope="col" style="width:20%">강의 요금</th>
+          </tr>
+        </thead>
+        <tbody>
+            <td scope="col" style="width:15%">{{ lecture_fee.l_name }}</td>
+            <td scope="col" style="width:15%">{{ lecture_fee.l_startdate }}</td>
+            <td scope="col" style="width:10%">{{ lecture_fee.l_term }}</td>
+            <td scope="col" style="width:20%">{{ lecture_fee.l_dept }}반 / {{ lecture_fee.l_class }}학년</td>
+            <td scope="col" style="width:20%">{{ lecture_fee.l_pay }} 원</td>
+        </tbody>
+      </table>
+    </div>
+    <div class="col"></div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+
+{% endblock %}

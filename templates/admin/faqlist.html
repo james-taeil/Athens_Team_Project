@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}질문 목록{% endblock %}
+{% block content %}
+
+   <div class="main-container">
+      <div class="pd-ltr-20 xs-pd-20-10">
+         <div class="min-height-200px">
+            <div class="container pd-0">
+               <div class="page-header">
+                  <div class="row">
+                     <div class="col-md-12 col-sm-12">
+                        <div class="title">
+                           <h4>자주하는 질문 목록</h4>
+                        </div>
+                        <nav aria-label="breadcrumb" role="navigation">
+                           <ol class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="index.html">자주하는 질문</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">목록 보기</li>
+                           </ol>
+                        </nav>
+                     </div>
+                  </div>
+               </div>
+<!--               시작-->
+                 <div class="card-box mb-30">
+               <div class="pd-20">
+                  <h4 class="text-blue h4">질문 목록</h4>
+               </div>
+               <div class="pb-20">
+                  <table class="data-table table stripe hover nowrap">
+                     <thead class="text-center">
+                        <tr>
+                           <th class="text-left" style="width: ">번호</th>
+                           <th class="datatable-nosort" style="width: 80%">질문 내용</th>
+                        </tr>
+                     </thead>
+                     <tbody class="text-center">
+                        {% if faq_list %}
+                        {% for i in faq_list %}
+                        <tr class="text-center" style="cursor:pointer;" onclick="location.href='/admin/faqdetail/{{ i.faq_no }}'">
+                           <td class="text-left">{{ i.faq_no }}</td>
+                           <td class=""><a href="#">{{ i.faq_question }}</a></td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                     </tbody>
+                  </table>
+
+    <!-- ---------------------------------------------------------------------------------------- -->
+
+<!--               끝-->
+            </div>
+         </div>
+      </div>
+   </div>
+      </div>
+   </div>
+
+<!-- js -->
+	<script src="/static/vendors/scripts/core.js"></script>
+	<script src="/static/vendors/scripts/script.min.js"></script>
+	<script src="/static/vendors/scripts/process.js"></script>
+	<script src="/static/vendors/scripts/layout-settings.js"></script>
+	<script src="/static/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<!-- buttons for Export datatable -->
+	<script src="/static/src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="/static/src/plugins/datatables/js/vfs_fonts.js"></script>
+	<!-- Datatable Setting js -->
+	<script src="../static/vendors/scripts/datatable-setting.js"></script></body>
+
+{% endblock %}

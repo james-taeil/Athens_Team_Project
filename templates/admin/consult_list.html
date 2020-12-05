@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}아테네 학원 - 상담 목록{% endblock %}
+{% block content %}
+
+	<div class="main-container">
+		<div class="pd-ltr-20 xs-pd-20-10">
+			<div class="min-height-200px">
+				<div class="page-header">
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="title">
+								<h4>상담 목록</h4>
+							</div>
+							<nav aria-label="breadcrumb" role="navigation">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="index.html">상담 관리</a></li>
+									<li class="breadcrumb-item active" aria-current="page">상담 목록</li>
+								</ol>
+							</nav>
+						</div>
+						<div class="col-md-6 col-sm-12 text-right">
+							<div class="dropdown">
+						</div>
+					</div>
+				</div>
+			</div>
+				<!-- Simple Datatable start -->
+				<div class="card-box mb-30">
+					<div class="pd-20">
+						<h4 class="text-blue h4">상담 목록</h4>
+					</div>
+					<div class="pb-20">
+						<table class="data-table table stripe hover nowrap text-center">
+							<thead>
+								<tr>
+									<th class="table-plus text-center" style="width : 8%;">상담번호</th>
+									<th class="text-center" style="width : 20%">신청일시</th>
+									<th class="text-center" style="width : 10%;">담당 선생님</th>
+									<th class="text-center" style="width : 10%;">학부모님 성함</th>
+<!--									<th class="text-center">자녀 이름</th>-->
+                                    <th class="text-center" style="width : 20%;">상담 예약시간</th>
+                                    <th class="text-center" style="width : 15%;">진행 여부</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% if consult_list %}
+								{% for consult in consult_list %}
+
+								<tr>
+									<td class="table-plus text-center">{{ consult.cu_no }}</td>
+									<td class="text-center">{{ consult.cu_join_time|date:"Y년 M d일 D P" }}</td>
+									<td class="text-center">{{ consult.t_no.t_name }}</td>
+									<td class="text-center">{{ consult.c_no.c_name }}
+									</td>
+									<td class="text-center">{{ consult.cu_res_time|date:"Y년 M d일 D P" }}</td>
+									<!-- 상담취소를 했으면 해당 텍스트를 빨간색으로 표시한다.-->
+									<td class="text-center {% if consult.cu_state == '상담취소' %} text-danger {% else %} text-primary {% endif %}">{{ consult.cu_state }}</td>
+
+								</tr>
+
+
+							{% endfor %}
+							{% endif %}
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+	<!-- js -->
+	<script src="../static/vendors/scripts/core.js"></script>
+	<script src="../static/vendors/scripts/script.min.js"></script>
+	<script src="../static/vendors/scripts/process.js"></script>
+	<script src="../static/vendors/scripts/layout-settings.js"></script>
+	<script src="../static/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<!-- buttons for Export datatable -->
+	<script src="../static/src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="../static/src/plugins/datatables/js/vfs_fonts.js"></script>
+	<!-- Datatable Setting js -->
+	<script src="../static/vendors/scripts/datatable-setting.js"></script></body>
+{% endblock %}

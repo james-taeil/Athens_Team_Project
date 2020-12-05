@@ -1,0 +1,35 @@
+<!--<form method="POST">-->
+<!--  {% csrf_token %}-->
+<!--  {% bootstrap_form form %}-->
+<!--  <button type="submit" class="btn btn-primary">login</button>-->
+<!--</form>-->
+
+
+
+        <div class ="container">
+            <div class= "row mt-5"> <!--여백추가 mt-5-->
+                    <div class= "col-12 text-center">
+                        <h1>회원가입</h1>
+                    </div>
+            </div>
+            <div class= "row">
+                <div class= "col-12">
+                    <form method="POST" action=".">
+                        {% csrf_token %} <!--크로스 도메인 막기위해 암호화된 키 숨겨놓는다.-->
+                        <div class="form-group"><!--form의 경우 데이터를 서버에 전달-->
+                            <label for="username">사용자 이름</label>
+                            <input type="text" class="form-control" id="username"  placeholder="사용자 이름" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">비밀번호</label>
+                            <input type="password" class="form-control" id="password" placeholder="비밀번호" name="password">
+                        </div>
+                        <div class="form-group">
+                            <label for="re-password">비밀번호</label>
+                            <input type="password" class="form-control" id="re-password" placeholder="비밀번호 확인" name="re-password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+            </div>
+        </div>

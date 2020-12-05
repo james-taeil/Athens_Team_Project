@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div id="wrap" class="text-center">
+        <div class="border">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 panel panel-default">
+                    <form action="" method="post">
+                        {{form.as_p}}
+                        <div class="form-group">
+                            {% csrf_token %}
+                            {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}  <!-- 필드 오류를 출력한다. -->
+            <div class="alert alert-danger">
+                <strong>{{ field.label }}</strong>
+                {{ error }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}   <!-- 넌필드 오류를 출력한다. -->
+        <div class="alert alert-danger">
+            <strong>{{ error }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+                            <div class="row mt-5">
+                                <div class="col-3">
+                                    <label for="exampleInputEmail1">이메일</label>
+                                </div>
+                                <div class="col-9">
+                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-3">
+                                    <label for="exampleInputPassword1">PW</label>
+                                </div>
+                                <div class="col-9">
+                                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                </div>
+                            </div>
+                        </div>
+                        <h2>
+                            <div class="sign">
+                                <div class="form-group">
+                                    {% csrf_token %}
+                                    <input class="btn btn-primary" type="submit" value="로그인" SignInView() >
+
+                                </div>
+                                <div class="form-group">
+                                    {% csrf_token %}
+                                    <input class="btn btn-primary" type="submit" value="강사로그인" SignInView_T()>
+                                </div>
+                            </div>
+                        </h2>
+                    </form>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="join_btn">
+                            <a href="/sign"><button type="button" class="btn btn-primary btn-sm">회원가입</button></a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="join_btn">
+                            <a href="/find"><button type="button" class="btn btn-primary btn-sm">이메일찾기</button></a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="join_btn">
+                            <a href="#PW찾기"><button type="button" class="btn btn-primary btn-sm">PW찾기</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

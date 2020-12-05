@@ -1,0 +1,75 @@
+{% extends 'teacherbase.html' %}
+
+{% block content %}
+<div style="margin-top:50px; margin-left:200px">
+  <h1>상담 예약 현황</h1>
+  <form method="post" action="{{pk}}">
+    {% csrf_token %}
+        <div class="form-group">
+            <button name="button" class="btn btn-secondary" value="1">전체</button>
+            <button name="button" class="btn btn-warning" value="2">상담대기</button>
+            <button name="button" class="btn btn-info" value="3">상담완료</button>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">이름</th>
+        <th scope="col">자녀</th>
+        <th scope="col">예약시간</th>
+        <th scope="col">진행현황</th>
+      </tr>
+    </thead>
+    <tbody>
+          {% if schedule %}
+          {% for list in schedule %}
+          <tr onclick="location.href='/consult/teacher/manage/{{list.pk}}'">
+            <th scope="row" style="width:15%">{{list.c_no.c_name}}</th>
+            <td style="width:15%">{{list.cu_student}}</td>
+            <td>{{list.cu_res_time}}</td>
+            <td>{{list.cu_state}}</td>
+          </tr>
+          {% endfor %}
+          {% else %}
+            <tr>
+              <td>등록된 상담이 없습니다.</td>
+            </tr>
+          {% endif %}
+    </tbody>
+  </table>
+  <div>
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if schedule.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ schedule.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in schedule.paginator.page_range %}
+            {% if page_number == schedule.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if schedule.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ schedule.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

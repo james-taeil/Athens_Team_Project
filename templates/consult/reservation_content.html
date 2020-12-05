@@ -1,0 +1,34 @@
+{% extends 'teacherbase.html' %}
+
+{% block content %}
+<div style="margin-top:50px; margin-left:200px">
+  <div class="card border-dark mb-3" style="width: 100%;">
+    <div class="card-header">
+       <h2>학부모님: {{content.c_no.c_name}}</h2>
+       <h3>학생: {{content.cu_student}}</h3>
+    </div>
+    <div class="card-body">
+      <h6 class="card-title">상담일: {{content.cu_res_time}}</h6>
+      <h6 class="card-title">진행현황: {{content.cu_state}}</h6>
+      <h5 class="card-text">사전 상담내용: {{content.cu_text}}</h5>
+    </div>
+  <br>
+  <h2>상담 내용</h2>
+  <div class="card border-dark mb-3" style="width: 100%;">
+    <div class="card-body">
+      {{content.cu_content}}
+    </div>
+  </div>
+  <form method="POST">
+  {% csrf_token %}
+  {% if content.cu_state == "상담대기" %}
+  <button style="width:100%" name="consult" class="btn btn-outline-info" type="submit" value="상담">상담시작</button>
+  {% else %}
+  <button style="width:100%" name="consult" class="btn btn-outline-info" type="submit" value="상담">수정</button>
+  {% endif %}
+  </form>
+  <br>
+  <button name="list" value="목록" class="btn btn-outline-secondary" onclick="location.href='/consult/teacher/manage/'">목록</button>
+  </div>
+</div>
+{% endblock %}

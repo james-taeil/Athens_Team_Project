@@ -1,0 +1,85 @@
+{% extends "base2.html" %}
+{% block content %}
+{% load static %}
+
+{% include "mypage/base/mypage_header.html" %}
+
+
+
+<div class="container mt-5 mb-2" style="padding : 100px 0px">
+        <div class="text-center mb-5">
+            <h1>자녀 정보 확인</h1>
+        </div>
+        <div class="container">
+            {% for list in total_list%}
+            <div class="row mt-5">
+                <div class="col " style="width: 50%; margin : auto;"><img src="{% static 'user/images/author1.jpg' %}" alt="" style="width:200px; height :200px;"></div>
+                {% for object in list|slice:":1" %}
+                <div class="col " style="width: 50%; margin : auto;">
+                    <table class="mb-5"><h2>자녀 개인정보</h2><br>
+                        <tr>
+                            <td><label>자녀 이름 : </label></td>
+                            <td><label type="text">{{ object.c_name }}</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>핸드폰 번호 : </label></td>
+                            <td><label type="text">{{ object.c_phone }}</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>학교 : </label></td>
+                            <td><label type="text">{{ object.c_school }}</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>주소 : </label></td>
+                            <td><label type="text">{{ object.c_add }}</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>생년월일 : </label></td>
+                            <td><label type="text">{{ object.c_birth }}</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                    </table>
+                </div>
+                {% endfor %}
+                {% for object in list|slice:"-2:-1" %}
+                <div class="col " style="width: 50%; margin : auto;">
+                    <table class="mb-5"><h2>자녀 수업정보</h2><br>
+                        {% for object in list|slice:"2:3" %}
+                        <tr>
+                            <td><label>강사 이름 : </label></td>
+                            <td><label type="text">{{ object.t_name }}</label></td>
+                        </tr>
+                        {% endfor %}
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>강의 이름 : </label></td>
+                            <td><label type="text">{{ object.l_name }}</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>강의 시작일/기간 : </label></td>
+                            <td><label type="text">{{ object.l_startdate }} / {{ object.l_term }}개월</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>강의 부서/학년  : </label></td>
+                            <td><label type="text">{{ object.l_dept }}부 / {{ object.l_class }}학년</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                        <tr>
+                            <td><label>강의 정원 : </label></td>
+                            <td><label type="text">{{ object.l_totalnum }}</label></td>
+                        </tr>
+                        <tr><td><label></label></td></tr>
+                    </table>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+</div>
+{% endblock %}
